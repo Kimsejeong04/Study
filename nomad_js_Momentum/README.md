@@ -50,3 +50,109 @@ function onLoginSubmit(event) {
   event.preventDefault(); // 새로고침 막기
 }
 ```
+
+<br><br>
+
+## 4. JS로  HTML 다루기 (DOM과 이벤트)
+- JS 파일이 HTML에 연결되어 있으면, JS를 통해 HTML 요소(Element)를 읽고 수정할 수 있다.
+
+
+- `console.dir(element)`를 사용하면 HTML요소를 JS의 객체 형태로 자세히 볼 수 있다.
+- 요소 찾기 (추천 순위):
+  1. `querySelector`, `querySelectorAll`
+  2. `getElementById`
+  3. `getElementsByClassName`, `getElementsByTagName`
+
+<br><br>
+
+## 5. 이벤트(Event) 리스너
+
+- 이벤트는 클릭, 마우스 오버, 화면 크기 조절 등 브라우저에서 일어나는 모든 사건을 의미. JS는 이벤트를 Listen(대기) 하다가, 이벤트가 발생하면 지정된 함수를 실행한다.
+
+<br>
+
+```JavaScript
+// 이벤트 핸들러(함수) 선언
+function handleTitleClick() {
+    console.log("clicked!");
+}
+
+// 이벤트 리스너 부착: "click" 이벤트가 발생하면 handleTitleClick 실행
+title.addEventListener("click", handleTitleClick);
+```
+
+<br><br>
+
+**`addEventListener` vs `on 이벤트`**
+1. `title.addEventListener("click", handleTitleClick)` (권장)
+2. `title.onclick = handleTitleClick`
+
+-> `addEventListener`를 사용하면 나중에 `title.removeEventListener("click", handleTitleClick)`을 통해 이벤트를 지울 수 있고, 같은 클릭 이벤트에 여러 개의 함수를 동시에 실행시킬 수 있기 때문에 훨씬 유연하게 동작 가능
+
+<br><br>
+
+## 6. JS와 CSS의 역할 분리
+- JS에서 style을 직접 수정하는 것은 좋지 않음 
+
+- 디자인(스타일)은 CSS가 담당하고, JS는 HTML 요소에 CSS클래스를 추가하거나 빼는 역할만 하는 것이 이상적인 구조 
+
+**1.단게: className 사용하기**
+CSS에 미리 `.active`라는 클래스를 만들어 두고, JS에는 이벤트가 발생할 때마다 해당 요소의 클래스 이름을 바꿔준다.
+
+```CSS
+/* CSS 파일 */
+h1 { 
+  color: cornflowerblue; 
+}
+.active { 
+  color: tomato; 
+}
+```
+
+```JavaScript
+/* JS 파일 */
+function handleTitleClick() {
+    const clickedClass = "active"; // 오타 방지를 위해 변수(상수)로 저장
+    
+    if (h1.className === clickedClass) {
+        h1.className = ""; 
+    } else {
+        h1.className = clickedClass;
+    }
+}
+```
+
+ - className을 일반 문자열로 설정하면 철자 하나가 일치하지 않다면 의도한대로 동작하지 않는다. 이 현상을 raw String이라 하는데 raw String이 반복되면 상수변수를 만들어서 저장하여 사용하는 것이 더 안전하다
+
+<br><br>
+## 7. classList와 toggle
+`className`은 **기존에 있던 클래스를 싹 다 지워버리고 통째로 교체**한다는 단점이 존재한다 이를 방지 하기 위해 `classList`를 사용
+
+<br>
+
+**2단계: classList 사용하기(add, remove, contains)**
+```JavaScript
+function handleTitleClick() {
+    const clickedClass = "clicked";
+    
+    // classList에 "clicked"가 포함되어(contains) 있다면?
+    if (h1.classList.contains(clickedClass)) {
+        h1.classList.remove(clickedClass); // 제거
+    } else {
+        h1.classList.add(clickedClass);    // 추가
+    }
+}
+```
+
+<br>
+
+**3단계: toggle**
+- toggle은 **클래스가 존재하면 제거하고, 존재하지 않으면 추가해 주는 작업**을 단 한 줄로 끝낸다. 위에서 작성한 `if-else`문과 똑같이 동작한다.
+
+```JavaScript
+function handleTitleClick() {
+    h1.classList.toggle("clicked");
+}
+
+h1.addEventListener("click", handleTitleClick);
+```
