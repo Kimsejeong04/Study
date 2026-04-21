@@ -156,3 +156,57 @@ function handleTitleClick() {
 
 h1.addEventListener("click", handleTitleClick);
 ```
+<br><br>
+
+## 8. 로그인 폼 다루기(Input Values & Form)
+
+#### **1.HTML의 기본 기능(Validation) 활용하기**
+
+JS에서 `if`문을 사용하여 "값이 비어있는지", "글자 수가 너무 긴지" 일일이 확인하는 대신, **HTML5의 내장 속성**을 사용할 수 있다.
+
+##### *이 속성들이 정상적으로 작동하기 위해서는 `<input>`요소가 반드시 `<form>`태그 안에 있어야 한다*
+
+
+- `required`: 필수 입력 항목 지정 (값이 비어있으면 브라우저가 자체적으로 경고 띄움)
+- `maxlength = "15"`: 최대 입력 글자 수를 15자로 제한
+- `placeholder = "..."`: 사용자가 입력하기 전에 보여주는 힌트 텍스트
+
+<br>
+
+```HTML
+<body>
+    <form id="login-form">
+        <input 
+            required  
+            maxlength="15"  
+            type="text"
+            placeholder="What is your name?"
+        />
+        <input type="submit" value="Log In"/>
+    </form>
+    <script src="app.js"></script>
+</body>
+```
+<br>
+
+#### 2. JS로 Input값(Value) 가져오기
+
+사용자가 입력란에 적은 텍스트를 JS로 가져올 때는 요소의 `.value` 속성을 사용한다.
+
+```JavaScript
+//? 1. HTML에서 필요한 요소들을 선택해서 가져오기(Selector)
+//? document.querySelector는 CSS 선택자처럼 요소를 찾을 수 있다 (#은 아이디 태그)
+const loginInput = document.querySelector("#login-form input");
+const loginButton = document.querySelector("#login-form button");
+
+//? 2. 버튼이 클릭되었을 때 실행될 함수 정의 (이벤트 핸들러)
+function onLoginBtnclick(){
+    const username = loginInput.value;  //? 사용자가 input 창에 입력한 텍스트 값(value)을 변수에 저장
+    console.log(username);
+}
+
+//? 3. 이벤트 리스너 추가(Event Listener)
+//? loginButton을 클릭하면 onLoginBtnclick 함수를 실행하기
+loginButton.addEventListener("click", onLoginBtnclick);  
+//? 주의: 함수 이름 뒤에 괄호()를 붙이면 클릭 안해도 바로 실행되므로 주의!
+```
