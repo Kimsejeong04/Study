@@ -156,6 +156,7 @@ function handleTitleClick() {
 
 h1.addEventListener("click", handleTitleClick);
 ```
+
 <br><br>
 
 ## 8. 로그인 폼 다루기(Input Values & Form)
@@ -209,4 +210,48 @@ function onLoginBtnclick(){
 //? loginButton을 클릭하면 onLoginBtnclick 함수를 실행하기
 loginButton.addEventListener("click", onLoginBtnclick);  
 //? 주의: 함수 이름 뒤에 괄호()를 붙이면 클릭 안해도 바로 실행되므로 주의!
+```
+<br><br>
+
+#### 3. Form의 기본 동작과 문제점
+HTML에서 `<form>` 태그 안의 `submit`이벤트가 발생하면 브라우저는 **데이터를 전송하기 위해 기본적으로 페이지를 새로고침**한다 이 새로고침이 발생하면 입력한 데이터나 화면 상태가 초기화되어 버리므로 주의해야 한다.
+
+<br><br>
+
+#### **4. 브라우저 기본 동작 막기: `preventDefault()`**
+`preventDefault()` 함수는 브라우저의 기본 행동(새로고침, 링크 이동 등)이 발생하지 않도록 강제로 막아주는 핵심 함수이다.
+
+- `event.preventDefault();` 를 호출하면, form을 submit해도 화면이 깜빡이지 않고 JS가 통제권을 넘겨받아 다음 로직을 처리할 수 있음
+
+
+<br>
+
+#### 5. 이벤트 객체 (Event Object)
+이벤트 리스너가 함수를 실행할 때, JS는 **방금 일어난 이벤트에 대한 정보(주체, 시간, 마우스 좌표 등)를 담은 '객체(Object)'를 첫 번째 인자(argument)로 채워 보내준다.**
+
+- 보통 이 첫 번째 인자의 이름을 `event` 또는 `e`라고 관습적으로 짓는다.
+- 앞서 사용한  `preventDefault()` 함수는 event객체 안에 내장된 함수다.
+- `console.log(event);`를 찍어보면 JS가 어떤 정보들을 담아 보내는지 확인 할 수 있다.
+
+<br>
+
+``` JavaScript
+const loginForm = document.querySelector("#login-form");
+const loginInput = document.querySelector("#login-form input");
+
+//? JS가 첫 번째 인자(event)로 방금 발생한 이벤트 정보를 넘겨줌
+function onLoginSubmit(event) {
+    //? 1. 브라우저의 기본 동작(새로고침)을 막음
+    event.preventDefault(); 
+    
+    //? 2. JS가 제공한 이벤트 정보 확인 (콘솔창에서 확인 가능)
+    console.log(event);
+    
+    //? 3. 사용자가 입력한 값 확인
+    console.log(loginInput.value);
+}
+
+//? "submit" 이벤트가 발생하면 onLoginSubmit 함수를 실행
+//? 주의: onLoginSubmit() 처럼 괄호를 쓰면 즉시 실행되므로 이름만 전달해야 함!
+loginForm.addEventListener("submit", onLoginSubmit);
 ```
